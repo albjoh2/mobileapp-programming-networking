@@ -31,7 +31,6 @@ function errorCallback(error) {
 }
 ```
 
-Add a `RecyclerView` to your layout
 Add a `ArrayList<Mountain>` as a member variable in your activity
 Add a `RecyclerView.Adapter` as a member variable in your activity
 Create a RecyclerView.Adapter and a RecyclerView.ViewHolder
