@@ -31,6 +31,19 @@ function errorCallback(error) {
 }
 ```
 
+Add a `RecyclerView` to your layout
+Add a `ArrayList<Mountain>` as a member variable in your activity
+Add a `RecyclerView.Adapter` as a member variable in your activity
+Create a RecyclerView.Adapter and a RecyclerView.ViewHolder
+Use getJson() to download your json data by changing the JSON_URL and write code in onPostExecute().
+Use the FamousPeaksJSON URL
+Hint: Use `adapter.notifyDataSetChanged();` after updating the list to let the adapter know that 
+    it should update the contents of the RecyclerView
+Display the names of the mountains in the `RecyclerView` Hint: override `toString()` in your 
+    Mountain class
+Write a short report where you explain the things that you have done
+Upload all artifacts as described in the assignment requirements.
+
 Bilder läggs i samma mapp som markdown-filen.
 
 ![](android.png)
