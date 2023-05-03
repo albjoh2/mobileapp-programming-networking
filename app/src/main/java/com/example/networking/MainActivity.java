@@ -14,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,16 +33,21 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new JsonFile(this, this).execute(JSON_FILE);
+        new JsonTask(this).execute(JSON_URL);
+        // Create GSON object to perform marshall/unmarshall operations
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Mountain>>() {
+        }.getType();
+        List<Mountain> mountains = gson.fromJson(json, type);
+
         RecyclerViewAdapter adapter;
         adapter = new RecyclerViewAdapter(this, items, item -> Toast.makeText(MainActivity.this, item.info(), Toast.LENGTH_SHORT).show());
 
         RecyclerView view = findViewById(R.id.recyclerview);
         view.setLayoutManager(new LinearLayoutManager(this));
         view.setAdapter(adapter);
-
-
     }
+
 
 
 
