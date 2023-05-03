@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.title.setText(items.get(position).info());
+            holder.title.setText(items.get(position).toString());
         }
 
         @Override
