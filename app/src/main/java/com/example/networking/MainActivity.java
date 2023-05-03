@@ -20,9 +20,9 @@ import java.util.List;
 @SuppressWarnings("FieldCanBeLocal")
 public class MainActivity extends AppCompatActivity implements JsonTask.JsonTaskListener {
 
-    private final String JSON_URL = "HTTPS_URL_TO_JSON_DATA_CHANGE_THIS_URL";
+    private final String JSON_URL = "https://wwwlab.iit.his.se/brom/kurser/mobilprog/dbservice/admin/getdataasjson.php?login=brom";
     private final String JSON_FILE = "mountains.json";
-    private ArrayList<Mountain> items = new ArrayList<>();
+    private final ArrayList<Mountain> items = new ArrayList<>();
 
 
     @Override
@@ -30,13 +30,8 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         new JsonFile(this, this).execute(JSON_FILE);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, items, new RecyclerViewAdapter.OnClickListener() {
-
-            @Override
-            public void onClick(Mountain item) {
-                Toast.makeText(MainActivity.this, item.info(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        RecyclerViewAdapter adapter;
+        adapter = new RecyclerViewAdapter(this, items, item -> Toast.makeText(MainActivity.this, item.info(), Toast.LENGTH_SHORT).show());
 
         RecyclerView view = findViewById(R.id.recyclerview);
         view.setLayoutManager(new LinearLayoutManager(this));
