@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     private final String JSON_URL = "HTTPS_URL_TO_JSON_DATA_CHANGE_THIS_URL";
     private final String JSON_FILE = "mountains.json";
-    ArrayList<RecyclerViewItem> items = new ArrayList<>();
+    private ArrayList<Mountain> items = new ArrayList<>();
 
 
     @Override
@@ -31,9 +31,10 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         setContentView(R.layout.activity_main);
         new JsonFile(this, this).execute(JSON_FILE);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, items, new RecyclerViewAdapter.OnClickListener() {
+
             @Override
-            public void onClick(RecyclerViewItem item) {
-                Toast.makeText(MainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+            public void onClick(Mountain item) {
+                Toast.makeText(MainActivity.this, item.info(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -46,29 +47,13 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
 
 
-    @SuppressWarnings("WeakerAccess")
-    public static class RecyclerViewItem {
-
-        private final String title;
-
-        public RecyclerViewItem(String title) {
-            this.title = title;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-    }
-
-
-
     public static class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-        private final List<RecyclerViewItem> items;
+        private final List<Mountain> items;
         private final LayoutInflater layoutInflater;
         private final OnClickListener onClickListener;
 
-        RecyclerViewAdapter(Context context, List<RecyclerViewItem> items, OnClickListener onClickListener) {
+        RecyclerViewAdapter(Context context, List<Mountain> items, OnClickListener onClickListener) {
             this.layoutInflater = LayoutInflater.from(context);
             this.items = items;
             this.onClickListener = onClickListener;
@@ -82,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.title.setText(items.get(position).getTitle());
+            holder.title.setText(items.get(position).info());
         }
 
         @Override
@@ -106,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         }
 
         public interface OnClickListener {
-            void onClick(RecyclerViewItem item);
+            void onClick(Mountain item);
         }
     }
 
