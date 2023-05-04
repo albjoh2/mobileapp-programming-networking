@@ -1,5 +1,6 @@
 package com.example.networking;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +26,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements JsonTask.JsonTaskListener {
 
     private final String JSON_URL = "https://mobprog.webug.se/json-api?login=brom";
-    private final ArrayList<Mountain> items = new ArrayList<>();
     private RecyclerViewAdapter adapter;
 
 
@@ -41,9 +41,10 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     public static class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-        private final List<Mountain> items;
+
         private final LayoutInflater layoutInflater;
         private final OnClickListener onClickListener;
+        private final List<Mountain> items;
 
         RecyclerViewAdapter(Context context, List<Mountain> items, OnClickListener onClickListener) {
             this.layoutInflater = LayoutInflater.from(context);
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onPostExecute(String json) {
         Log.d("MainActivity", json);
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         }.getType();
         ArrayList<Mountain> items = gson.fromJson(json, type);
 
-        adapter = new RecyclerViewAdapter(this, items, item -> Toast.makeText(MainActivity.this, item.toString(), Toast.LENGTH_SHORT).show());
+        adapter = new RecyclerViewAdapter(this, items, item -> Toast.makeText(MainActivity.this, item.info(), Toast.LENGTH_SHORT).show());
         adapter.notifyDataSetChanged();
 
         RecyclerView view = findViewById(R.id.recyclerview);
