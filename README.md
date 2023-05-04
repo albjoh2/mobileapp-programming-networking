@@ -1,54 +1,115 @@
 
 # Rapport
 
-**Skriv din rapport här!**
 
-_Du kan ta bort all text som finns sedan tidigare_.
-
-## Följande grundsyn gäller dugga-svar:
-
-- Ett kortfattat svar är att föredra. Svar som är längre än en sida text (skärmdumpar och programkod exkluderat) är onödigt långt.
-- Svaret skall ha minst en snutt programkod.
-- Svaret skall inkludera en kort övergripande förklarande text som redogör för vad respektive snutt programkod gör eller som svarar på annan teorifråga.
-- Svaret skall ha minst en skärmdump. Skärmdumpar skall illustrera exekvering av relevant programkod. Eventuell text i skärmdumpar måste vara läsbar.
-- I de fall detta efterfrågas, dela upp delar av ditt svar i för- och nackdelar. Dina för- respektive nackdelar skall vara i form av punktlistor med kortare stycken (3-4 meningar).
-
-Programkod ska se ut som exemplet nedan. Koden måste vara korrekt indenterad då den blir lättare att läsa vilket gör det lättare att hitta syntaktiska fel.
-
+Skapar `ArrayList<Mountain>` som en variabel i MainActivity. Denna variabel håller bergen och skapas
+med instanser av klassen Mountain.
 ```
-function errorCallback(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            // Geolocation API stöds inte, gör något
-            break;
-        case error.POSITION_UNAVAILABLE:
-            // Misslyckat positionsanrop, gör något
-            break;
-        case error.UNKNOWN_ERROR:
-            // Okänt fel, gör något
-            break;
+    private final ArrayList<Mountain> items = new ArrayList<>();
+```
+
+Skapar variabeln adapter till `RecyclerViewAdapter`.
+```
+    private RecyclerViewAdapter adapter;
+```
+
+Instansierar en RecyclerViewAdapter och en ViewHolder klass med variabler och metoder för att sköta
+recycler viewns funktionalitet. Här 
+```
+public static class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+
+    private final List<Mountain> items;
+    private final LayoutInflater layoutInflater;
+    private final OnClickListener onClickListener;
+
+    RecyclerViewAdapter(Context context, List<Mountain> items, OnClickListener onClickListener) {
+        this.layoutInflater = LayoutInflater.from(context);
+        this.items = items;
+        this.onClickListener = onClickListener;
+    }
+
+    @Override
+    @NonNull
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(layoutInflater.inflate(R.layout.recyclerviewitem, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.title.setText(items.get(position).toString());
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView title;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            title = itemView.findViewById(R.id.title);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onClickListener.onClick(items.get(getAdapterPosition()));
+        }
+    }
+
+    public interface OnClickListener {
+        void onClick(Mountain item);
     }
 }
 ```
 
-Add a `ArrayList<Mountain>` as a member variable in your activity
-Add a `RecyclerView.Adapter` as a member variable in your activity
-Create a RecyclerView.Adapter and a RecyclerView.ViewHolder
-Use getJson() to download your json data by changing the JSON_URL and write code in onPostExecute().
-Use the FamousPeaksJSON URL
-Hint: Use `adapter.notifyDataSetChanged();` after updating the list to let the adapter know that 
-    it should update the contents of the RecyclerView
-Display the names of the mountains in the `RecyclerView` Hint: override `toString()` in your 
-    Mountain class
-Write a short report where you explain the things that you have done
-Upload all artifacts as described in the assignment requirements.
+När datan hämtas körs funktionen onPostExecute(). Funktionen skapar ett Gson objekt och omvandlar 
+med hjälp av Gson JSON strängen till ett JSON objekt och skapar instanser av Mountain klassen.
+Dessa används sedan i adaptern. Adaptern uppdaterad med notifyDataSetChanged metoden på adaptern. 
 
-Bilder läggs i samma mapp som markdown-filen.
+```
+public void onPostExecute(String json) {
+    Log.d("MainActivity", json);
 
-![](android.png)
+    Gson gson = new Gson();
+    Type type = new TypeToken<List<Mountain>>() {
+    }.getType();
+    ArrayList<Mountain> items = gson.fromJson(json, type);
 
-Läs gärna:
+    adapter = new RecyclerViewAdapter(this, items, item -> Toast.makeText(MainActivity.this, item.toString(), Toast.LENGTH_SHORT).show());
+    adapter.notifyDataSetChanged();
 
-- Boulos, M.N.K., Warren, J., Gong, J. & Yue, P. (2010) Web GIS in practice VIII: HTML5 and the canvas element for interactive online mapping. International journal of health geographics 9, 14. Shin, Y. &
-- Wunsche, B.C. (2013) A smartphone-based golf simulation exercise game for supporting arthritis patients. 2013 28th International Conference of Image and Vision Computing New Zealand (IVCNZ), IEEE, pp. 459–464.
-- Wohlin, C., Runeson, P., Höst, M., Ohlsson, M.C., Regnell, B., Wesslén, A. (2012) Experimentation in Software Engineering, Berlin, Heidelberg: Springer Berlin Heidelberg.
+    RecyclerView view = findViewById(R.id.recyclerview);
+    view.setLayoutManager(new LinearLayoutManager(this));
+    view.setAdapter(adapter);
+}
+```
+
+URL variabeln ändras till webbservicens webbadress och internet tillåts.
+
+Mounutainklassen skapas, övers är variablerna, sedan kommer konstruktorn och slutligen metoden som 
+används för att skriva ut namnet på berget i recycler viewn:
+```
+public class Mountain {
+    private String name;
+    private String location;
+    private int height;
+
+    public Mountain(String inName, String inLocation, int inHeight){
+        name = inName;
+        location = inLocation;
+        height = inHeight;
+    }
+
+    @Override
+    public String toString(){
+        return name;
+    }
+}
+```
+
+
+
+![](Skarmavbild.png)

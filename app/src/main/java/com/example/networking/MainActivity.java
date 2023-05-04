@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
 
     private final String JSON_URL = "https://mobprog.webug.se/json-api?login=brom";
     private final ArrayList<Mountain> items = new ArrayList<>();
+    private RecyclerViewAdapter adapter;
 
 
     @Override
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         new JsonTask(this).execute(JSON_URL);
-
     }
 
 
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements JsonTask.JsonTask
         Type type = new TypeToken<List<Mountain>>() {
         }.getType();
         ArrayList<Mountain> items = gson.fromJson(json, type);
-        RecyclerViewAdapter adapter;
+
         adapter = new RecyclerViewAdapter(this, items, item -> Toast.makeText(MainActivity.this, item.toString(), Toast.LENGTH_SHORT).show());
         adapter.notifyDataSetChanged();
 
