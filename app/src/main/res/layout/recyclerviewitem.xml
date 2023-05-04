@@ -6,9 +6,13 @@
     android:padding="10dp">
 
     <TextView
+
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:background="#ccccff"
         android:layout_height="wrap_content"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:padding="55dp"
+        android:layout_width="match_parent"/>
 
 </LinearLayout>
